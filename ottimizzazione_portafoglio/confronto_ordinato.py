@@ -25,7 +25,7 @@ def index_to_selection(i, num_assets):
 
 
 def print_result(result):
-    selection = result.x
+    selection = result.x # result._raw_samples o result.__dict__['_samples'] (meglio)
     value = result.fval
     print("Optimal: selection {}, value {:.4f}".format(selection, value))
     eigenstate = result.min_eigen_solver_result.eigenstate 
@@ -38,6 +38,7 @@ def print_result(result):
     print("---------------------------------------------------")
     for i in i_sorted:
         x = index_to_selection(i, num_assets)
+        # convert() converte il problema da lineare a QUBO
         value = QuadraticProgramToQubo().convert(qp).objective.evaluate(x)
         # value = portfolio.to_quadratic_program().objective.evaluate(x)
         probability = probabilities[i]
@@ -85,7 +86,7 @@ budget = 300
 # con bounds = [(0, 3), (0, 3), (0, 3), (0, 3)] e budget = 525 -> SUCCESS
 # con bounds = [(0, 1), (0, 1), (0, 2), (0, 3)] e budget = 180 -> SUCCESS
 # con bounds = [(0, 1), (0, 1), (0, 2), (0, 3)] e budget = 160 -> SUCCESS {con bounds = [(0, 6), (0, 6), (0, 6), (0, 6)] ottengo un altro risultato SUCCESS}
-bounds = [(0, 1), (0, 1), (0, 1), (0, 2)] 
+bounds = [(0, 2), (0, 2), (0, 2), (0, 2)] 
 portfolio = PortfolioOptimization(
     expected_returns=medie_diversi_er.to_numpy(), covariances=cov_matrix.to_numpy(), risk_factor=q, budget=budget
    , bounds = bounds
@@ -107,8 +108,8 @@ quad = mdl.quad_matrix_sum(cov_matrix, x) # performa il calcolo x’Qx (per la s
 linear = np.dot(assets['Returns'], x) # per la prima parte della funzione oggetto. 
 mdl.minimize(q * quad - linear) # vincolo: minimizza questa roba. Q AGISCE SULLE COVARIANZE E SI CAMBIA IL SEGNO DEI RITORNI
 #mdl.add_constraint(mdl.sum(x[i] for i in range(num_assets)) == budget) # vincolo: la somma dei titoli da acquistare deve essere pari al budget
-mdl.add_constraint(mdl.sum(x[i]*lista_prezzi[i] for i in range(num_assets)) <= budget)
-#mdl.add_constraint(mdl.sum(x[i]*lista_prezzi[i] for i in range(num_assets)) >= 100)
+mdl.add_constraint(mdl.sum(x[i]*lista_prezzi[i] for i in range(num_assets)) == budget)
+#mdl.add_constraint(mdl.sum(x[i]*lista_prezzi[i] for i in range(num_assets)) == 100)
 qp = from_docplex_mp(mdl) # traduce "in termini di qiskit" un mp problem in un problema quadratico
 print(qp)
 
@@ -161,3 +162,24 @@ print(result)
 
 print(assets)
 print_result(result)
+
+#########################
+
+# fai funzione da stringa a risultato compatto:
+stringa = '10111111'
+punto_attuale = 0
+vv = 0
+for v in bounds:
+    vvv = vv + v[1]
+    string = stringa[punto_attuale: vvv]
+    punto_attuale += 2
+    vv += v[1]
+    print(string)
+
+# fai funzione che somma i numeri di una stringa
+
+n = 0
+prova = list('48')
+for i, v in enumerate(prova):
+    n += int(prova[i])
+print(n)
