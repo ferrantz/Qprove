@@ -40,8 +40,10 @@ def espandi_bounds(lista_bounds):
 
 
 bounds_espanso = espandi_bounds(bounds)
-combinazioni = list(product(bounds_espanso[0], bounds_espanso[1], bounds_espanso[2], bounds_espanso[3]))
-
+#####
+# OCCHIO
+#####combinazioni = list(product(bounds_espanso[0], bounds_espanso[1], bounds_espanso[2], bounds_espanso[3]))
+combinazioni = []
 
 
 budget_min = 30
