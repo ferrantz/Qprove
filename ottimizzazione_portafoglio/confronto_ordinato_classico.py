@@ -1,5 +1,3 @@
-print('Print di prova per test sincro fatto da Github Desktop')
-print('Print di prova per sincro fatto da terminale')
 import numpy as np
 import pandas as pd
 from operator import itemgetter
