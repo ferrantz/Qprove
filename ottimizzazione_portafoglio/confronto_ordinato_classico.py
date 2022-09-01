@@ -1,3 +1,5 @@
+print('Print di prova per test sincro')
+
 import numpy as np
 import pandas as pd
 from operator import itemgetter
