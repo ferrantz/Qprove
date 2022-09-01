@@ -1,0 +1,65 @@
+# from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
+# from numpy import pi
+
+# qreg_q = QuantumRegister(27, 'q')
+# creg_c0 = ClassicalRegister(2, 'c0')
+# circuit = QuantumCircuit(qreg_q, creg_c0)
+
+# circuit.sx(qreg_q[0])
+# circuit.rz(8.973384442933327, qreg_q[0])
+# circuit.sx(qreg_q[0])
+# circuit.rz(9.42477796076938, qreg_q[0])
+# circuit.sx(qreg_q[1])
+# circuit.rz(0.17152849933429248, qreg_q[1])
+# circuit.rz(-1.5707963267948966, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.cx(qreg_q[0], qreg_q[1])
+# circuit.sx(qreg_q[0])
+# circuit.rz(2.4002537193359474, qreg_q[0])
+# circuit.sx(qreg_q[0])
+# circuit.rz(9.42477796076938, qreg_q[0])
+# circuit.rz(-3.141592653589793, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.rz(1.5707963267948966, qreg_q[1])
+# circuit.rz(4.522269964492648, qreg_q[1])
+# circuit.rz(-1.5707963267948966, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.cx(qreg_q[0], qreg_q[1])
+# circuit.sx(qreg_q[0])
+# circuit.rz(7.71099262956173, qreg_q[0])
+# circuit.sx(qreg_q[0])
+# circuit.rz(9.42477796076938, qreg_q[0])
+# circuit.rz(-3.141592653589793, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.rz(1.5707963267948966, qreg_q[1])
+# circuit.rz(7.71270635835927, qreg_q[1])
+# circuit.rz(-1.5707963267948966, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.cx(qreg_q[0], qreg_q[1])
+# circuit.sx(qreg_q[0])
+# circuit.rz(5.33921605066794, qreg_q[0])
+# circuit.sx(qreg_q[0])
+# circuit.rz(9.42477796076938, qreg_q[0])
+# circuit.rz(-3.141592653589793, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.rz(1.5707963267948966, qreg_q[1])
+# circuit.rz(5.150632961777022, qreg_q[1])
+# circuit.sx(qreg_q[1])
+# circuit.rz(9.42477796076938, qreg_q[1])
+# circuit.measure(qreg_q[0], creg_c0[0])
+# circuit.measure(qreg_q[1], creg_c0[1])
+
+# print(circuit.depth())
+
+from qiskit import IBMQ
+
+IBMQ.load_account()
+provider_reale = IBMQ.get_provider(hub = 'partner-cnr', group = 'icar-napoli', project = 'ferrante')
+backend_reale = provider_reale.get_backend('ibmq_montreal') # prova a vedere che succede se cambi il backend
+job = backend_reale.retrieve_job('62bdad42e47a7377131a6f43')
+print(job._data['summary_data_']['summary']['gates_executed'])
+dizionario_risposte = job.result().results[0].data.counts
+shots = sum(dizionario_risposte.values())
+
+p_segnale = (dizionario_risposte['0x2']**2 / shots )  / 4
+p_rumore = (((dizionario_risposte['0x0'] **2 + dizionario_risposte['0x1']**2 + dizionario_risposte['0x3'] **2)/ shots )/ 4)

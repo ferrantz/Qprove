@@ -1,0 +1,10 @@
+num_assets = 4
+budget = 195 
+bounds = [(0, 4), (0, 4), (0, 4), (0, 4)] 
+BACKEND = 'ibmq_qasm_simulator' 
+Numero di qubit del circuito ry: 4
+Depth del circuito ry: 1
+vqe_mes.ansatz.num_qubits: 4
+vqe_mes.ansatz.depth(): 1
+
+DA RILEVARE CREAZIONE CONTINUA DI JOB SUL SIMULATORE REMOTO

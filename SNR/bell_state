@@ -1,0 +1,35 @@
+from qiskit import *
+from matplotlib import pyplot as plt
+import math
+
+IBMQ.load_account()
+provider_reale = IBMQ.get_provider(hub = 'partner-cnr', group = 'icar-napoli', project = 'ferrante')
+backend_reale = provider_reale.get_backend('ibmq_montreal') # prova a vedere che succede se cambi il backend
+job = backend_reale.retrieve_job('62bc1e5008f974c30c6643d6')
+
+dizionario_risposte = job.result().results[0].data.counts
+shots = sum(dizionario_risposte.values())
+dizionario_risposte_2 = {}
+for k, v in dizionario_risposte.items():
+    dizionario_risposte_2[k] = v/shots
+lista_snr = []
+# variabile_a = (dizionario_risposte_2['0x0'] ** 2 + dizionario_risposte_2['0x3'] ** 2)
+# variabile_b = (dizionario_risposte_2['0x1'] ** 2 + dizionario_risposte_2['0x2'] ** 2) 
+variabile_a = (0.5** 2 + 0.5)
+variabile_b = (0.00000000001 + 0) 
+variabile_c = 4
+potenza_segnale = variabile_a / variabile_c
+potenza_rumore = variabile_b / variabile_c
+SNR = potenza_segnale / potenza_rumore
+lista_snr.append(SNR)
+
+ax = plt.gca()
+
+plt.plot(dizionario_risposte_2.keys(), lista_snr)
+ax.set_title('SNR curve')
+plt.xlabel("Depth of Bell (transpiled) circuit")
+plt.ylabel("10log10(SNR)")
+plt.xticks(dizionario_risposte_2.keys())
+plt.show()
+
+# 25.682139887000485 / 108.75061263391699
