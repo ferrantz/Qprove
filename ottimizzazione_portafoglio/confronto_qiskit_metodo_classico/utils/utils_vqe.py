@@ -12,6 +12,7 @@ def crea_problema_quadratico(df_assets, covarianze, propensione_al_rischio, fond
     #     expected_returns = ritorni.to_numpy(), cov_matrix = covarianze.to_numpy(), risk_factor = propensione_al_rischio, 
     #         budget = fondi, bounds = limiti)
     cov_matrix = covarianze.to_numpy()
+    mdl.clear()
     if limiti is not None:
         x = [mdl.integer_var(lb = limiti[i][0], ub = limiti[i][1], name = f"x_{i}") for i in range(numero_titoli)]
     else:
@@ -21,6 +22,12 @@ def crea_problema_quadratico(df_assets, covarianze, propensione_al_rischio, fond
     mdl.minimize(propensione_al_rischio * quad - linear) # vincolo: minimizza questa roba. Q AGISCE SULLE COVARIANZE E SI CAMBIA IL SEGNO DEI RITORNI
     mdl.add_constraint(mdl.sum(x[i] * prezzi[i] for i in range(numero_titoli)) == fondi)
     return from_docplex_mp(mdl) # traduce "in termini di qiskit" un mp problem in un problema quadratico
+
+def conta_combinazioni_quantistiche(result):
+
+    '''Ritorna il numero di combinazioni provate dalla VQE'''
+
+    return len(result.__dict__['_samples'])
 
 def liste_combinazioni_e_fval(result):
 

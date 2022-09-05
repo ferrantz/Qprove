@@ -1,22 +1,26 @@
 import pandas as pd
 import numpy as np
 
-def crea_dataset_da_csv(file_csv, variabile_da_parsare):
+def crea_dataset_da_csv(file_csv, numero_asset):
 
     '''Crea il dataset per il nostro problema a partire da un file csv. I valori mancanti vengono fillati con la media.'''
 
-    df = pd.read_csv(file_csv, parse_dates = [variabile_da_parsare])[3:]
-    df = df.rename(columns = {'Unnamed: 0': 'Date', 'Adj Close': 'Asset_1', 'Adj Close.1': 'Asset_2', 'Adj Close.2': 'Asset_3', 'Adj Close.3': 'Asset_4'})
+    df = pd.read_csv(file_csv)[1:] # , parse_dates = [variabile_da_parsare])[3:]
     df = df.drop(columns = ['Date'])
+    lst_nomi_variabili = [] # mi serve per dare i nomi alle variabili in maniera progressiva
+    for i in range(df.shape[1]):
+        lst_nomi_variabili.append('Asset_' + str(i + 1))
+    df.columns = lst_nomi_variabili    
     df = df.apply(pd.to_numeric)
-    return df.apply(lambda x: x.fillna(x.mean()),axis=0)
+    df = df.apply(lambda x: x.fillna(x.mean()),axis=0)
+    return df.iloc[: , :numero_asset] # gli dico di prendere i primi numero_asset titoli
 
-def crea_lista_prezzi(p_asset_1, p_asset_2, p_asset_3, p_asset_4):
+def crea_lista_prezzi(p_asset_1, p_asset_2, p_asset_3, p_asset_4, p_asset_5, p_asset_6, p_asset_7, numero_asset):
 
     '''Dati i prezzi dei quattro asset restituisce la lista di questi.
     N.B.= I prezzi devono essere ordinati.'''
 
-    return [p_asset_1, p_asset_2, p_asset_3, p_asset_4]
+    return [p_asset_1, p_asset_2, p_asset_3, p_asset_4, p_asset_5, p_asset_6, p_asset_7][:numero_asset]
 
 def apprezzamenti(df):
 
@@ -62,12 +66,12 @@ def conta_asset(df):
 
     return df.shape[1]
 
-def elementi_utili(file_csv, variabile_da_parsare, p_asset_1, p_asset_2, p_asset_3, p_asset_4):
+def elementi_utili(file_csv, numero_asset, p_asset_1, p_asset_2, p_asset_3, p_asset_4, p_asset_5, p_asset_6, p_asset_7):
 
     '''Ritorna le variabili con gli elementi necessari per fare portfolio optimization'''
 
-    dataset = crea_dataset_da_csv(file_csv, variabile_da_parsare)
-    lst_prezzi = crea_lista_prezzi(p_asset_1, p_asset_2, p_asset_3, p_asset_4) 
+    dataset = crea_dataset_da_csv(file_csv, numero_asset)
+    lst_prezzi = crea_lista_prezzi(p_asset_1, p_asset_2, p_asset_3, p_asset_4, p_asset_5, p_asset_6, p_asset_7, numero_asset) 
     log_apprezz_quod = apprezzamenti(dataset)
     covarianze = covarianza(dataset)
     #corr_matrix = correlazione(dataset)
@@ -78,3 +82,9 @@ def elementi_utili(file_csv, variabile_da_parsare, p_asset_1, p_asset_2, p_asset
     print(df_assets)
     num_assets = conta_asset(dataset)
     return dataset, lst_prezzi, log_apprezz_quod, covarianze, medie_er, sqm_ann, df_assets, num_assets
+
+def slicing_bounds(BOUNDS, numero_asset):
+
+    '''Seleziona i primi n asset dato un bounds completo arbitrario'''
+
+    return BOUNDS[: numero_asset]
