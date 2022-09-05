@@ -1,4 +1,4 @@
-BACKEND_SELEZIONATO = '0'
+BACKEND_SELEZIONATO = '0' # 0: locale; 1: simulatore remoto; 2: macchina reale
 STRINGA_PERCORSO_CSV = 'ottimizzazione_portafoglio/dati_confronto_4_asset.csv'
 ARGOMENTO_PARSING_CSV = 'Unnamed: 0'
 PREZZO_ASSET_1 = 50

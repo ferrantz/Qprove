@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from operator import itemgetter
-from itertools import product
 
 PREZZO_ASSET_1 = 50
 PREZZO_ASSET_2 = 70

@@ -123,7 +123,7 @@ def varianza_portafoglio(df_combinazioni, matrice_delle_covarianze):
 
     lista_varianze_portafoglio = []
     for combo in range(df_combinazioni.shape[0]):
-            lista_varianze_portafoglio.append(np.dot(df_combinazioni['combinazione'][combo].T, np.dot(matrice_delle_covarianze, df_combinazioni['combinazione'][0]))) # controllare che la combinazione sia corretta
+            lista_varianze_portafoglio.append(np.dot(df_combinazioni['combinazione'][combo].T, np.dot(matrice_delle_covarianze, df_combinazioni['combinazione'][combo]))) # controllare che la combinazione sia corretta
     return lista_varianze_portafoglio
 
 # BACKEND = 'ibmq_montreal' 
