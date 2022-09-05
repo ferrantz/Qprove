@@ -1,5 +1,3 @@
-# TO DO: VEDERE PERCHÉ LE VARIANZE DEI DUE DATAFRAME NON SONO UGUALI
-
 # scopo: confrontare risultati di qiskit con quelli del metodo classico esaustivo
 
 from qiskit.utils import algorithm_globals
@@ -9,9 +7,11 @@ from qiskit import Aer
 from qiskit.circuit.library import TwoLocal
 from qiskit.utils import QuantumInstance
 from qiskit_optimization.algorithms import MinimumEigenOptimizer
-from qiskit import IBMQ, Aer #, execute
+from qiskit import IBMQ, Aer
 import time, sys
-from utils import *
+from utils.utils_operations import *
+from utils.utils_vqe import *
+from utils.utils_classic import *
 from iperparametri import *
 
 # BACKEND_SELEZIONATO = input('Si scelga il backend del calcolo ' + '\n' + '0: calcolo su macchina locale'+ '\n' + '1: calcolo su simulatore IBM' + '\n' + 
@@ -22,9 +22,6 @@ if BACKEND_SELEZIONATO != '0' and BACKEND_SELEZIONATO != '1' and BACKEND_SELEZIO
     dataframe_combinazioni_fval = []
     df_classico_esaustivo = []
     sys.exit()
-
-# def calcola_variabili():
-#     return 
 
 # QISKIT
 def main_qiskit():
