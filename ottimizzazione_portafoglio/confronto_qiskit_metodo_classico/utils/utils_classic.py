@@ -1,12 +1,10 @@
 from itertools import product
 import numpy as np
 import pandas as pd
-from bigO import BigO
-
 
 def espandi_bounds(lista_bounds):
 
-    '''Espande i bounds e crea le tuple con i valori interi pi+ù i bounds compresi, in ordine non decrescente'''
+    '''Espande i bounds e crea le tuple con i valori interi più i bounds compresi, in ordine non decrescente'''
 
     lst = []
     for i in lista_bounds:
@@ -17,7 +15,19 @@ def conta_combinazioni_classiche(limiti_espansi):
 
     '''Ritorna il numero di combinazioni (dati il numero degli asset ed i bounds).'''
 
-    return len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2], limiti_espansi[3])))
+    if len(limiti_espansi) == 2:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1])))
+    if len(limiti_espansi) == 3:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2])))
+    if len(limiti_espansi) == 4:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2], limiti_espansi[3])))
+    if len(limiti_espansi) == 5:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2], limiti_espansi[3], limiti_espansi[4])))
+    if len(limiti_espansi) == 6:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2], limiti_espansi[3], limiti_espansi[4], limiti_espansi[5])))
+    if len(limiti_espansi) == 7:
+        output = len(list(product(limiti_espansi[0], limiti_espansi[1], limiti_espansi[2], limiti_espansi[3], limiti_espansi[4], limiti_espansi[5], limiti_espansi[6])))
+    return output
 
 
 def iterazione_classica(limiti_espansi, fondi, array_prezzi, logaritmi_degli_apprezzamenti_giornalieri, matrice_covarianze, propensione_al_rischio):
@@ -51,4 +61,5 @@ def iterazione_classica(limiti_espansi, fondi, array_prezzi, logaritmi_degli_app
             lista_combinazioni.append(w)
             lista_h.append(h)
             d += 1
-    return pd.DataFrame(list(zip(lista_combinazioni, lista_h)))
+    h_best = lista_h[0]
+    return pd.DataFrame(list(zip(lista_combinazioni, lista_h))), h_best
